@@ -1,0 +1,30 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Padauk 14), page 1.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.=  002723 L   |     .__.ABS.=  000000 G   |     .__.CPU.=  000000 L
+    .__.H$L.=  000000 L   |     ACC_ZERO=  000000     |     CLKMD_EN=  000010 
+    CLKMD_EN=  000004     |     CLKMD_EN=  000002     |     CLKMD_IH=  000008 
+    CLKMD_IH=  000020     |     CLKMD_IH=  000000     |     CLKMD_IH=  000028 
+    MAP_LOCA=  000100     |     MISC_163=  000002     |     PINOUT  =  000000 
+    TYPE_IHR=  000001     |     acc     =  000000     |   2 brightne   000017 R
+  2 bytecoun   000016 R   |     clkmd   =  000003     |   2 dither_m   000000 R
+  2 dither_p   000010 R   |   2 dither_p   000011 R   |   2 i          000014 R
+    ihrcr   =  00000B     |   4 loop       000080 R   |     misc    =  00003B 
+    pa      =  000010     |     pac     =  000011     |     paph    =  000012 
+  2 r          000015 R   |     sp      =  000002     |   4 start      000070 R
+  4 waitloop   0000FE R   |   2 wave_p     000012 R   |   2 wave_p_h   000013 R
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Padauk 14), page 2.
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE      size      0   flags    0
+   1 DATA       size      0   flags    8
+   2 DATA0      size     18   flags    8
+   3 CODE       size      0   flags    8
+   4 CODE1      size    10C   flags    8
+   5 CODE2      size    200   flags    8
+

@@ -10,7 +10,6 @@ MAP_LOCATION = 0x100 ; needs to be 256 pword aligned
 .area DATA (ABS)
 .org 0x00
 
-dither_map:         .ds 16 ; must be address 0x00
 dither_p:           .ds 1
 dither_p_hi:        .ds 1
 wave_p:             .ds 1
@@ -19,6 +18,9 @@ i:                  .ds 1
 r:                  .ds 1
 bytecount:          .ds 1
 brightness:         .ds 1
+
+.org 0x10
+dither_map:         .ds 16 ; must be address 0x00
 
 .area CODE (ABS)
 .org 0x00
@@ -84,7 +86,7 @@ brightness:         .ds 1
 	mov a,  #15
 	mov dither_map+15, a
 
-	mov a, #dither_map
+	mov a, #(dither_map-16)
 	mov dither_p, a
 	clear dither_p_hi
 	mov a, #(MAP_LOCATION >> 8)
@@ -122,16 +124,17 @@ loop:
 	mov r, a                            ; 5 + 1
 	ldsptl                              ; 6 + 2
 	mov brightness, a                   ; 8 + 1
-	nop                                 ; 9 + 1
+	mov a, #15                          ; 9 + 1
 
 	               set1 pa, #PINOUT     ; 0 + 1
-	mov a, #15                          ; 1 + 1
-	and dither_p, a                     ; 2 + 1
+	and dither_p, a                     ; 1 + 1
+	set1 dither_p, #4                   ; 2 + 1
 	               set0 pa, #PINOUT     ; 3 + 1
 	idxm a, dither_p                    ; 4 + 2
 	add brightness, a                   ; 6 + 1
 	inc dither_p                        ; 7 + 1
-	nop2                                ; 8 + 2
+	set0 dither_p, #4                   ; 8 + 1
+	nop                                 ; 9 + 1
 
 	               set1 pa, #PINOUT     ; 0 + 1
 	nop2                                ; 1 + 2

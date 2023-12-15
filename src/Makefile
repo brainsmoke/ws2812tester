@@ -1,5 +1,5 @@
 
-TARGETS=ws2812test-pdk14.ihx ws2812test-pdk13.ihx
+TARGETS=ws2812test-pfs154.ihx ws2812test-pms150c.ihx
 CLEAN=$(TARGETS)
 DEPS=map.asm pdk.asm
 
@@ -11,10 +11,10 @@ all: $(TARGETS)
 clean:
 	-rm $(CLEAN)
 
-%-pdk13.rel: %.asm $(DEPS)
+%-pms150c.rel: %.asm $(DEPS)
 	$(AS13) -s -o -l $@ $<
 
-%-pdk14.rel: %.asm $(DEPS)
+%-pfs154.rel: %.asm $(DEPS)
 	$(AS14) -s -o -l $@ $<
 
 %.ihx: %.rel

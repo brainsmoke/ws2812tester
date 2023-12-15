@@ -2,7 +2,7 @@
 .module ws2812test
 
 PINOUT = 0
-MAP_LOCATION = 0x100 ; needs to be 256 pword aligned
+MAP_LOCATION = 0x200 ; needs to be 256 pword aligned
 
 .include "pdk.asm"
 .include "map.asm"
@@ -16,7 +16,7 @@ wave_p:             .ds 1
 wave_p_hi:          .ds 1
 i:                  .ds 1
 r:                  .ds 1
-bytecount:          .ds 1
+ledcount:           .ds 1
 brightness:         .ds 1
 
 .org 0x10
@@ -109,10 +109,11 @@ sub a, #3
 add a, #3
 mov i, a
 
-mov a, #(64*3)       ; need to be a multiple of 16 not to mess up dithering
-mov bytecount, a
+mov a, #(128)       ; need to be a multiple of 16 not to mess up dithering
+mov ledcount, a
 
 loop:
+.macro bitbang_byte_missing_6cycles phase
 	               set0 pa, #PINOUT     ; 7 + 1
 	nop2                                ; 8 + 2
 
@@ -120,8 +121,8 @@ loop:
 	mov a, r                            ; 1 + 1
 	mov wave_p, a                       ; 2 + 1
 	               set0 pa, #PINOUT     ; 3 + 1
-	add a, #99                          ; 4 + 1
-	mov r, a                            ; 5 + 1
+	mov a, #(phase)                     ; 4 + 1
+	add wave_p, a                       ; 5 + 1
 	ldsptl                              ; 6 + 2
 	mov brightness, a                   ; 8 + 1
 	mov a, #15                          ; 9 + 1
@@ -184,7 +185,20 @@ loop:
 	nop                                 ; 1 + 1
 	t1sn brightness, #4                 ; 2 + 1
 	               set0 pa, #PINOUT     ; 3 + 1
-	dzsn bytecount                      ; 4 + 1
+.endm
+
+.macro bitbang_byte phase
+bitbang_byte_missing_6cycles phase
+    nop2                                ; 4 + 2
+    nop                                 ; 6 + 1
+                   set0 pa, #PINOUT     ; 7 + 1
+    nop2                                ; 8 + 2
+.endm
+
+bitbang_byte 0
+bitbang_byte 85
+bitbang_byte_missing_6cycles 170
+	dzsn ledcount                       ; 4 + 1
 	goto loop                           ; 5 + 2
 ;   nop                                 ; 6 + 1
 mov a, #249                ;  1
